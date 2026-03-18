@@ -1,10 +1,4 @@
-okay we need to parlallelli build the landing page of our web site 
-
-i want you to give .e the best strategy for our website to get the best response and impression 
-
-I want a strategy which can tackle human emotions and mainly we will start with india launch, think thoroughly and tell me the best website strategy which matches the apple google calude and perplexity level, and also refer the other compitators website and tell me the vest whoch suites us
-
-This is a high-stakes decision, so here's a thorough, opinionated strategy built specifically for Crux — for India, for emotion, for credibility.
+.
 
 ***
 
