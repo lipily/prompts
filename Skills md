@@ -1,0 +1,489 @@
+
+
+## Skill 1: Design System
+
+```markdown
+---
+name: crux-design-system
+description: >
+  Use this skill when building ANY UI component, page, or layout for the
+  Crux platform. Defines the complete design token system — colors,
+  typography, spacing, shadows, animation presets, and component patterns
+  at Apple/Google standard. Always load this before any other UI skill.
+tools: [create_file, edit_file]
+---
+
+# Crux Design System
+
+## Tech Stack (Non-negotiable)
+- Next.js 14 App Router
+- TypeScript (strict mode)
+- Tailwind CSS v3
+- Framer Motion v11
+- Shadcn/ui as base components
+- Lucide React for icons
+- next/font with Geist (primary) + Geist Mono (code)
+
+## Design Tokens (tailwind.config.ts)
+
+```ts
+colors: {
+  background: {
+    DEFAULT: '#09090B',   // near-black base
+    secondary: '#111113', // card backgrounds
+    tertiary: '#18181B',  // elevated surfaces
+  },
+  border: {
+    DEFAULT: 'rgba(255,255,255,0.08)',
+    active: 'rgba(255,255,255,0.16)',
+  },
+  accent: {
+    purple: '#7C3AED',
+    'purple-light': '#A78BFA',
+    blue: '#3B82F6',
+    'blue-light': '#93C5FD',
+    glow: 'rgba(124,58,237,0.4)',
+  },
+  text: {
+    primary: '#FAFAFA',
+    secondary: '#A1A1AA',
+    muted: '#52525B',
+    inverse: '#09090B',
+  },
+  status: {
+    running: '#22C55E',
+    pending: '#F59E0B',
+    error: '#EF4444',
+    complete: '#6B7280',
+  },
+}
+```
+
+## Typography Scale
+- Display: Geist 72px/80px, weight 700, tracking -0.04em
+- H1: 56px/64px, weight 700, tracking -0.03em
+- H2: 40px/48px, weight 600, tracking -0.02em
+- H3: 28px/36px, weight 600
+- Body L: 18px/28px, weight 400
+- Body: 16px/24px, weight 400
+- Small: 14px/20px
+- XS: 12px/16px, weight 500 (labels, badges)
+
+## Spacing System
+Use 4px base grid. Sections: py-24 lg:py-32. Cards: p-6 lg:p-8.
+Container: max-w-7xl mx-auto px-4 sm:px-6 lg:px-8.
+
+## Component Patterns
+
+### Glass Card
+```tsx
+<div className="rounded-2xl border border-white/8 bg-white/[0.03] 
+backdrop-blur-sm p-6 hover:border-white/16 
+transition-all duration-300 hover:bg-white/[0.05]">
+```
+
+### Gradient Text (Headlines)
+```tsx
+<span className="bg-gradient-to-r from-white via-white/90 to-white/60 
+bg-clip-text text-transparent">
+```
+
+### Glow Button (Primary CTA)
+```tsx
+<button className="relative px-8 py-4 rounded-full bg-violet-600 
+text-white font-semibold text-base
+hover:bg-violet-500 transition-all duration-200
+shadow-[0_0_30px_rgba(124,58,237,0.4)] 
+hover:shadow-[0_0_40px_rgba(124,58,237,0.6)]
+active:scale-95">
+```
+
+### Agent Status Badge
+```tsx
+<span className="flex items-center gap-1.5 text-xs font-medium px-2.5 
+py-1 rounded-full bg-emerald-500/10 text-emerald-400 border 
+border-emerald-500/20">
+  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 
+  animate-pulse" />
+  Running
+</span>
+```
+
+## Animation Presets (Framer Motion)
+```ts
+export const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+}
+
+export const staggerContainer = {
+  animate: { transition: { staggerChildren: 0.08 } }
+}
+
+export const scaleIn = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1 },
+  transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+}
+```
+
+## Layout Rules
+- Always dark background — no white pages except auth modals
+- Every section has subtle radial gradient behind it 
+  `bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(124,58,237,0.15),transparent)]`
+- Borders are always rgba white, never hard colors
+- No card box-shadows — use glow effects only on CTAs
+- Mobile-first breakpoints: sm(640) md(768) lg(1024) xl(1280)
+```
+
+***
+
+## Skill 2: Landing Page
+
+```markdown
+---
+name: crux-landing-page
+description: >
+  Build the complete Crux marketing landing page (app/page.tsx).
+  Includes hero, problem, how-it-works, use cases, social proof,
+  pricing preview, and final CTA. Load crux-design-system first.
+  India-first emotional copy strategy baked in.
+tools: [create_file, edit_file]
+---
+
+# Crux Landing Page — app/(marketing)/page.tsx
+
+## Page Structure (in order)
+1. <Navbar />
+2. <HeroSection />
+3. <LogoTicker />           — model provider logos
+4. <ProblemSection />
+5. <HowItWorksSection />
+6. <UseCasesGrid />
+7. <LiveDemoSection />      — animated agent session preview
+8. <SocialProofSection />
+9. <PricingPreview />
+10. <FinalCTA />
+11. <Footer />
+
+---
+
+## Navbar
+- Fixed top, blur backdrop: `bg-background/80 backdrop-blur-xl`
+- Left: Crux wordmark (Geist Bold)
+- Center: nav links — Product, Pricing, Docs, Blog
+- Right: "Sign in" (ghost) + "Start Free" (glow button, small)
+- Mobile: hamburger → full-screen overlay menu
+- On scroll >50px: border-b border-white/8 appears
+
+## HeroSection
+```
+Emotion: AWE + RECOGNITION
+Animation: fadeUp stagger on each line
+```
+Layout:
+- Centered, max-w-4xl
+- Above headline: pill badge  
+  `✦ Multi-Agent AI Platform · Now in Beta`
+- Main headline (Display size):  
+  "Your Goal. Your Agents.  
+   **Done.**"  
+  (Last word in accent gradient)
+- Sub: "Crux reads your goal, builds a team of AI agents,  
+  and delivers the finished work — documents, research,  
+  drafts, and more."
+- CTA row: [Start Free — No card needed] [Watch Demo ▶]
+- Hero visual: Animated agent session card stack
+  showing 3-4 agents with status dots, task names, 
+  progress bars — all subtly animating
+- Background: radial glow from top center
+
+## ProblemSection
+```
+Emotion: RECOGNITION (especially India audience)
+```
+3-column grid on desktop, stacked mobile:
+- ⏱ "3 hours researching. 1 hour writing. 30 min formatting."
+- 😤 "You're an expert. You shouldn't be doing busywork."  
+- 💸 "Hiring help is expensive. AI tools still need YOU to drive."
+
+Transition line: **"Crux changes the equation."**
+
+## HowItWorksSection
+3 steps with large step number, icon, title, description,
+and a real UI screenshot/mockup beside each:
+
+1. **Tell Crux your goal** — One sentence. Natural language.
+2. **Crux builds the agent team** — Researcher. Writer. Analyst. 
+   Designer. Whatever the task needs.
+3. **Download your results** — DOCX, PDF, XLSX, or read in-app.
+
+## UseCasesGrid
+6-card grid (2x3 desktop, 1 col mobile).
+Each card: emoji + title + 1-line description + "→ Try this"
+
+- 🎬 Screenplay writers — Full character bibles in minutes
+- 📊 Startup founders — Competitor research + cold outreach
+- 🎓 Students & researchers — Deep reports, properly cited
+- 💼 Freelancers — Proposals written while you sleep
+- 🏢 Marketing agencies — Content pipelines on autopilot  
+- 🛒 E-commerce sellers — Product research + listing copy
+
+## PricingPreview
+Teaser only (not full pricing page):
+Two cards — Free and Pro
+Free: "5 sessions/day · All models · No card needed"
+Pro: "₹499/mo · Unlimited · Priority · Doc generation"
+Link: "See full pricing →"
+
+## FinalCTA
+Full-width section, centered:
+Large headline: "What will you build today?"
+Sub: "Join thousands of professionals letting agents do the work."
+Big glow CTA button + micro-copy: "Free forever plan available"
+Background: intense radial glow
+```
+
+***
+
+## Skill 3: Auth Pages
+
+```markdown
+---
+name: crux-auth-pages
+description: >
+  Build all authentication pages — signup, login, forgot password,
+  verify email, onboarding flow. Uses Firebase Auth. 
+  Load crux-design-system first.
+tools: [create_file, edit_file]
+---
+
+# Crux Auth Pages
+
+## Routes
+- /auth/login
+- /auth/signup  
+- /auth/forgot-password
+- /auth/verify-email
+- /onboarding (post-signup 3-step wizard)
+
+## Layout Wrapper: app/(auth)/layout.tsx
+- Split layout: left side = brand panel, right side = form
+- Left panel (hidden mobile): 
+  - Crux logo top-left
+  - Big quote or animated agent preview
+  - "Trusted by 10,000+ professionals" + avatar stack
+- Right panel: centered form, max-w-sm, py-12
+
+## Login Page
+```tsx
+Fields: Email, Password
+Below form: "Forgot password?" link
+Primary CTA: "Sign in"
+Divider: "or continue with"
+OAuth buttons: Google, GitHub (use shadcn Button variant=outline)
+Bottom: "Don't have an account? Start free →"
+```
+Error states: red border + inline error message below field.
+Loading state: spinner inside button, button disabled.
+
+## Signup Page
+```tsx
+Fields: Full name, Email, Password (with strength meter)
+Password strength: 4-segment bar 
+  weak=red, fair=amber, strong=green, very strong=violet
+Primary CTA: "Create free account"
+Micro-copy: "No credit card · Free forever plan"
+Terms: "By signing up you agree to our Terms and Privacy Policy"
+```
+
+## Onboarding Wizard (3 steps, /onboarding)
+Progress bar at top (33% → 66% → 100%)
+
+Step 1 — "What do you do?"
+Radio card grid: Developer / Researcher / Writer / 
+Marketer / Student / Founder / Other
+
+Step 2 — "What will you use Crux for?"  
+Multi-select pill chips: Research / Writing / Data Analysis /
+Character Design / Email Outreach / Code Generation / 
+Document Creation / Other
+
+Step 3 — "Your first session"
+Prefilled textarea with suggestion based on Step 1+2 selection.
+CTA: "Launch my first session →" → redirects to /dashboard
+
+## Firebase Auth Integration
+```ts
+// lib/auth.ts
+import { GoogleAuthProvider, signInWithPopup, 
+createUserWithEmailAndPassword, 
+signInWithEmailAndPassword } from 'firebase/auth'
+```
+Use React Context for auth state: `AuthContext` wrapping entire app.
+Protect routes with middleware.ts checking Firebase token.
+```
+
+***
+
+## Skill 4: Dashboard & App UI
+
+```markdown
+---
+name: crux-dashboard
+description: >
+  Build the complete Crux application dashboard — session list,
+  new session flow, live session viewer, session history, 
+  agent profile manager, settings. This IS the product UI.
+  Load crux-design-system first.
+tools: [create_file, edit_file]
+---
+
+# Crux Dashboard — app/(app)/
+
+## Routes
+- /dashboard           — home, recent sessions, quick start
+- /dashboard/new       — new session input + submit
+- /dashboard/sessions  — all sessions history
+- /dashboard/sessions/[id] — live session viewer
+- /dashboard/agents    — agent profile manager
+- /dashboard/skills    — skills library
+- /dashboard/settings  — account, billing, API keys
+
+## App Layout: app/(app)/layout.tsx
+Sidebar (240px) + main content area:
+
+Sidebar sections:
+- Top: Crux logo + "Beta" pill
+- New Session button (full-width, glow)
+- Nav: Dashboard, Sessions, Agents, Skills, Settings
+- Bottom: User avatar + name + plan badge + "Upgrade" button
+
+## Dashboard Home /dashboard
+- "Good morning, {name}" greeting
+- Quick-start input: large textarea + submit
+- "Recent Sessions" — last 5 session cards
+- "Suggested Goals" — 4 pre-written prompt chips
+
+## New Session /dashboard/new
+Large centered textarea (full focus):
+placeholder: "Describe what you want to accomplish..."
+Below: Model selector (dropdown), estimated cost display
+CTA: "Start Session →"
+On submit: creates Firestore session doc → redirects to 
+/dashboard/sessions/{new_id}
+
+## Live Session Viewer /dashboard/sessions/[id]
+This is the most important page — show agents working in real-time.
+
+Layout (3-column on desktop):
+LEFT (280px) — Session info panel:
+  - Session title (from query)
+  - Status badge (Planning/Running/Complete)
+  - Token usage progress bar
+  - Cost so far
+  - Agent list with status dots
+
+CENTER — Live activity stream:
+  SSE event feed. Each event type gets a distinct card:
+  - `planning` → Shows execution plan as collapsible tree
+  - `agent_start` → Agent card appears with name + task
+  - `tool_call` → Indented under agent: "🔍 Searching web..."
+  - `token` → Streaming text under agent card (typewriter)
+  - `agent_done` → Card gets green checkmark + summary
+  - `artifact` → Download card: file icon + name + download btn
+  - `done` → Full summary card, total cost, total tokens
+
+RIGHT (320px, desktop only) — Output preview:
+  Scrollable area showing final answer as it builds up.
+  When complete: rendered markdown output.
+
+## Sessions History /dashboard/sessions
+Table view:
+Columns: Date | Query (truncated) | Agents | Tokens | Cost | Status
+Row click → open session viewer
+Filter by: Status, Date range, Cost
+Search by query text
+
+## Agent Profile Manager /dashboard/agents
+Grid of agent profile cards. Each card shows:
+- Agent name + model badge
+- Description
+- Tools list (pill chips)
+- Skills assigned
+- Edit / Duplicate / Delete actions
+- "Create New Agent" card (dashed border)
+
+Edit modal: form for all agent_profiles fields from Firestore schema.
+
+## Skills Library /dashboard/skills
+Grid of skill cards. Each shows:
+- Skill name + version badge
+- Description
+- Active/Inactive toggle
+- "View SKILL.md" button → opens modal with full content
+
+## Settings /dashboard/settings
+Tabs: Profile | Billing | API Keys | Notifications
+
+Profile: Name, email, avatar upload
+Billing: Current plan card, usage this month, upgrade button
+API Keys: Generate/revoke personal API keys
+```
+
+***
+
+## Skill 5: Pricing & Billing Pages
+
+```markdown
+---
+name: crux-pricing-billing
+description: >
+  Build the public pricing page and in-app billing/upgrade flow
+  with DUMMY payment (Razorpay UI only, no real charges).
+  India-first pricing in INR. Load crux-design-system first.
+tools: [create_file, edit_file]
+---
+
+# Crux Pricing — app/(marketing)/pricing/page.tsx
+
+## Pricing Plans (INR, India-first)
+
+| | Free | Pro | Team |
+|--|--|--|--|
+| Price | ₹0 | ₹499/mo | ₹1,999/mo |
+| Sessions/day | 5 | Unlimited | Unlimited |
+| Agents/session | 3 | 10 | 25 |
+| Models | All | All + Priority | All + Priority |
+| Doc generation | ❌ | ✅ | ✅ |
+| API access | ❌ | ✅ | ✅ |
+| Team members | 1 | 1 | 10 |
+| Support | Community | Email | Priority |
+
+## Pricing Page Layout
+- Toggle: Monthly / Yearly (yearly = 2 months free)
+- 3 plan cards — Pro card is highlighted with glow border
+- Each card: price, tagline, CTA button, feature list
+- Below cards: FAQ section (6 questions)
+- Trust bar: "Cancel anytime · No hidden fees · INR billing"
+
+## Upgrade Modal (in-app)
+Triggered from Settings → Billing or any paywall hit.
+Shows: Plan comparison mini-table → "Upgrade to Pro" button
+
+## Dummy Payment Flow
+Route: /checkout?plan=pro
+
+Page shows:
+- Order summary card (Plan name, ₹499/mo)
+- Razorpay-styled form UI (static, no real SDK):
+  - Cardholder name
+  - Card number (format: XXXX XXXX XXXX XXXX)
+  - Expiry + CVV
+  - UPI ID option tab
+  - Net Banking option tab
+- "Pay ₹499" button → shows loading 
+
+Citations:
+[1] 1000275929.jpg https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/66867282/ce851ce5-7c1d-4669-a72d-f8c8dd2ef551/1000275929.jpg
